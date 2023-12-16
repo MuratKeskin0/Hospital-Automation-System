@@ -914,6 +914,9 @@ int updateAppointmentInformation(int id, VisitType newType, Date newDate, bool n
     return found ? 0 : 1;
 }
 
+
+
+
 void readAllData()
 {
     readPatient();
