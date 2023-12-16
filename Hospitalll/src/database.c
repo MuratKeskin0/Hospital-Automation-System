@@ -858,113 +858,64 @@ int updateDoctorInformation(int id, char *newFirstName, char *newLastName, char 
 
 int updateAppointmentInformation(int id, VisitType newType, Date newDate, bool newConfirmed)
 {
-    FILE *file = fopen("../txtFiles/appointment.txt", "r");
-    FILE *temp = fopen("../txtFiles/temp_appointment.txt", "w");
+    FILE *file = fopen("../database/appointment.txt", "r");
+    FILE *temp = fopen("../database/temp_appointment.txt", "w");
 
     if (file == NULL || temp == NULL)
     {
-        printf("Error opening files!");
+        printf("Error opening files!\n");
         return 1;
     }
 
-    Appointment *appointment;
-    Appointment *tempAppointments[appointmentCount];
-    char chunk[128];
-    int lineNum = 0;
-    int tempAppointmentCount = 0;
+    Appointment appointment;
+    int found = 0;
 
-    while (fgets(chunk, sizeof(chunk), file) != NULL)
+    while (fscanf(file, "%d", &appointment.id) == 1)
     {
-        if (chunk != NULL)
+        fscanf(file, "%d", &appointment.patient.id);
+        fscanf(file, "%d", &appointment.doctor.id);
+        fscanf(file, "%d", &appointment.type);
+        fscanf(file, "%d", &appointment.date.day);
+        fscanf(file, "%d", &appointment.date.month);
+        fscanf(file, "%d", &appointment.date.year);
+        fscanf(file, "%d", &appointment.confirmed);
+
+        if (appointment.id == id)
         {
-            size_t newline_pos = strcspn(chunk, "\n");
-            chunk[newline_pos] = '\0';
+            appointment.type = newType;
+            appointment.date.day = newDate.day;
+            appointment.date.month = newDate.month;
+            appointment.date.year = newDate.year;
+            appointment.confirmed = newConfirmed;
+            found = 1;
         }
 
-        if (lineNum % 7 == 0)
-        {
-            appointment = (Appointment *)malloc(sizeof(Appointment));
-            appointment->id = atoi(chunk);
-
-            if (appointment->id == id)
-            {
-                appointment->id = id;
-                appointment->type = newType;
-                appointment->date.day = newDate.day;
-                appointment->date.month = newDate.month;
-                appointment->date.year = newDate.year;
-                appointment->confirmed = newConfirmed;
-            }
-
-            fprintf(temp, "%d\n", appointment->id);
-            lineNum++;
-        }
-        else if (lineNum % 7 == 1)
-        {
-            if (appointment->id != id)
-            {
-
-                appointment->patient.id;
-            }
-            fprintf(temp, "%s\n", appointment->patient.id);
-            lineNum++;
-        }
-        else if (lineNum % 7 == 2)
-        {
-            if (appointment->id != id)
-            {
-
-                appointment->doctor.id;
-            }
-            fprintf(temp, "%s\n", appointment->doctor.id);
-            lineNum++;
-        }
-        else if (lineNum % 7 == 3)
-        {
-            if (appointment->id != id)
-            {
-                appointment->type = newType;
-            }
-            fprintf(temp, "%d\n", appointment->type);
-            lineNum++;
-        }
-        else if (lineNum % 7 == 4)
-        {
-            if (appointment->id != id)
-            {
-                appointment->date.day = newDate.day;
-                appointment->date.month = newDate.month;
-                appointment->date.year = newDate.year;
-            }
-            fprintf(temp, "%d-%d-%d\n", appointment->date.day, appointment->date.month, appointment->date.year);
-            lineNum++;
-        }
-        else if (lineNum % 7 == 5)
-        {
-            if (appointment->id != id)
-            {
-                appointment->confirmed = newConfirmed;
-            }
-            fprintf(temp, "%d\n", appointment->confirmed);
-            lineNum++;
-        }
+        fprintf(temp, "%d\n", appointment.id);
+        fprintf(temp, "%d\n", appointment.patient.id);
+        fprintf(temp, "%d\n", appointment.doctor.id);
+        fprintf(temp, "%d\n", appointment.type);
+        fprintf(temp, "%d\n", appointment.date.day);
+        fprintf(temp, "%d\n", appointment.date.month);
+        fprintf(temp, "%d\n", appointment.date.year);
+        fprintf(temp, "%d\n", appointment.confirmed);
     }
 
     fclose(file);
     fclose(temp);
 
-    remove("../txtFiles/appointment.txt");
-    rename("../txtFiles/temp_appointment.txt", "../txtFiles/appointment.txt");
-
-    memset(appointments, 0, sizeof(appointments));
-    for (int i = 0; i < tempAppointmentCount; i++)
+    if (!found)
     {
-        appointments[i] = *tempAppointments[i];
+        printf("Appointment with ID %d not found.\n", id);
     }
-    appointmentCount = tempAppointmentCount;
 
-    return 0;
+    remove("../database/appointment.txt");
+    rename("../database/temp_appointment.txt", "../database/appointment.txt");
+
+    return found ? 0 : 1;
 }
+
+
+
 
 void readAllData()
 {
