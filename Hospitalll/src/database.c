@@ -1551,3 +1551,32 @@ int deleteAllDoctors()
     doctorCount = 0;
     return 0;
 }
+
+int isValidAppointmentId(int appointmentID) {
+    for (int i = 0; i < appointmentCount; i++) {
+        if (appointments[i].id == appointmentID) {
+            return 1; 
+        }
+    }
+    return 0;
+}
+
+int isValidDoctorId(int doctorID) {
+    for (int i = 0; i < doctorCount; i++) {
+        if (doctors[i].id == doctorID) {
+            return 1;
+        }
+    }
+    return 0; 
+}
+
+int isValidPatientId(int patientID) {
+    for (int i = 0; i < patientCount; i++) {
+        if (patients[i].id == patientID) {
+            return 1; 
+        }
+    }
+    return 0; 
+}
+
+
