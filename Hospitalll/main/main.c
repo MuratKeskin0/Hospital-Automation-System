@@ -15,7 +15,6 @@ void defaultInformation();
 int Display();
 int AdminMenu();
 
-
 int main()
 {
     defaultInformation();
@@ -100,9 +99,17 @@ int Display()
                 case 2:
                     showAllAppointments();
                     Color_White();
-                    printf("Please write the ID of the Appointment you want to update :");
+                    printf("Please write the ID of the Appointment you want to update: ");
                     scanf("%d", &option);
                     Color_Reset();
+
+                    if (!isValidAppointmentId(option))
+                    {
+                        Color_Red();
+                        printf("Invalid appointment ID! Please try again.\n");
+                        Color_Reset();
+                        break;
+                    }
 
                     printf("Enter the new type (0 for VISIT_TYPE_CONSULTATION, 1 for VISIT_TYPE_GENERAL): ");
                     int isValidTypeInput = 0;
@@ -127,7 +134,7 @@ int Display()
 
                     updateAppointmentInformation(option, newType, newDate, newConfirmed);
                     Color_Green();
-                    printf("\nTopic has been updated successfully\n");
+                    printf("\nAppointment has been updated successfully\n");
                     Color_Reset();
                     break;
 
@@ -135,6 +142,14 @@ int Display()
                     showAllAppointments();
                     Color_White();
                     printf("\nPlease write the ID of the Appointment you want to delete :");
+
+                    if (!isValidAppointmentId(option))
+                    {
+                        Color_Red();
+                        printf("Invalid appointment ID! Please try again.\n");
+                        Color_Reset();
+                        break;
+                    }
 
                     scanf("%d", &option);
                     Color_Reset();
@@ -150,6 +165,14 @@ int Display()
                     printf("Please write the ID of the Doctor you want to update :");
                     scanf("%d", &option);
                     Color_Reset();
+
+                    if (!isValidDoctorId(option))
+                    {
+                        Color_Red();
+                        printf("Invalid doctor ID! Please try again.\n");
+                        Color_Reset();
+                        break;
+                    }
 
                     printf("Enter the new first name ");
                     scanf("%s", &newNameDoctor);
@@ -176,6 +199,14 @@ int Display()
                     showAllDoctors();
                     Color_White();
                     printf("\nPlease write the ID of the Doctor you want to delete :");
+
+                     if (!isValidDoctorId(option))
+                    {
+                        Color_Red();
+                        printf("Invalid doctor ID! Please try again.\n");
+                        Color_Reset();
+                        break;
+                    }
 
                     scanf("%d", &option);
                     Color_Reset();
@@ -256,6 +287,14 @@ int Display()
                     scanf("%d", &option);
                     Color_Reset();
 
+                     if (!isValidPatientId(option))
+                    {
+                        Color_Red();
+                        printf("Invalid patient ID! Please try again.\n");
+                        Color_Reset();
+                        break;
+                    }
+
                     printf("Enter the new first name ");
                     scanf("%s", &newFirstNamePatientt);
 
@@ -283,6 +322,14 @@ int Display()
                     showAllPatients();
                     Color_White();
                     printf("\nPlease write the ID of the Patient you want to delete :");
+
+                    if (!isValidPatientId(option))
+                    {
+                        Color_Red();
+                        printf("Invalid patient ID! Please try again.\n");
+                        Color_Reset();
+                        break;
+                    }
 
                     scanf("%d", &option);
                     Color_Reset();
@@ -383,7 +430,18 @@ int Display()
 
                     printf("Enter the ID of the doctor you want to choose: ");
                     Color_Reset();
+
+
                     scanf("%d", &selectedDoctorID);
+
+                    
+                    if (!isValidDoctorId(selectedDoctorID))
+                    {
+                        Color_Red();
+                        printf("Invalid doctor ID! Please try again.\n");
+                        Color_Reset();
+                        break;
+                    }
 
                     int selectedDoctorIndex = -1;
                     for (int i = 0; i < doctorCount; i++)
@@ -411,6 +469,15 @@ int Display()
                     printf("Enter the ID of the patient you want to choose: ");
                     Color_Reset();
                     scanf("%d", &selectedPatientID);
+
+                    
+                    if (!isValidPatientId(selectedPatientID))
+                    {
+                        Color_Red();
+                        printf("Invalid patient ID! Please try again.\n");
+                        Color_Reset();
+                        break;
+                    }
 
                     int selectedPatientIndex = -1;
                     for (int i = 0; i < patientCount; i++)
@@ -458,6 +525,15 @@ int Display()
 
                     int appointmentidd, newStatus;
                     scanf("%d", &appointmentidd);
+
+                    if (!isValidAppointmentId(appointmentidd))
+                    {
+                        Color_Red();
+                        printf("Invalid appointment ID! Please try again.\n");
+                        Color_Reset();
+                        break;
+                    }
+                    
 
                     printf("Enter the new confirmation status (0 for No, 1 for Yes): ");
                     scanf("%d", &newStatus);
